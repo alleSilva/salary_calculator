@@ -1,5 +1,5 @@
-import 'dart:ui';
-
+import 'package:salary_calculator/widgets/calculator_text_form_field.dart';
+import 'package:salary_calculator/widgets/calculator_button.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,7 +23,7 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text("Calculadora de Salário"),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.blue,
         centerTitle: true,
         actions: <Widget>[
           IconButton(onPressed: () {}, icon: const Icon(Icons.refresh))
@@ -32,43 +32,12 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
-            child: TextField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  isDense: true,
-                  labelText: "Valor da hora trabalhada",
-                  labelStyle:
-                      const TextStyle(color: Colors.blueGrey, fontSize: 20.0),
-                  errorStyle:
-                      const TextStyle(color: Colors.redAccent, fontSize: 20.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(23),
-                      borderSide: const BorderSide(color: Colors.blueGrey)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(23),
-                      borderSide: const BorderSide(color: Colors.blueGrey)),
-                  filled: true,
-                  fillColor: Colors.white),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
-            child: SizedBox(
-              width: 80.0,
-              height: 40.0,
-              child: ElevatedButton(
-                onPressed: () => {},
-                child: const Text(
-                  "Calcular",
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-              ),
-            ),
-          )
+          const CalculatorTextFormField(label: 'Valor da hora Trabalhada'),
+          const CalculatorTextFormField(label: 'Quantas dias tem o mês'),
+          const CalculatorTextFormField(label: 'Quantas horas extras 60 %'),
+          const CalculatorTextFormField(label: 'Quantas horas extras 110 %'),
+          const CalculatorTextFormField(label: 'Quantos dependentes você tem'),
+          CalculatorButton(label: 'Calculator', onPressed: () => {}),
         ],
       ),
     );
