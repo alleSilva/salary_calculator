@@ -17,6 +17,54 @@ class SalaryCalculator extends StatefulWidget {
 }
 
 class _SalaryCalculatorState extends State<SalaryCalculator> {
+  final TextEditingController hVController = TextEditingController();
+  final TextEditingController dMController = TextEditingController();
+  final TextEditingController hE60Controller = TextEditingController();
+  final TextEditingController hE110Controller = TextEditingController();
+  final TextEditingController nDepController = TextEditingController();
+
+  String _infoText = "Preencha os campos";
+
+  void _resetFields() {
+    hVController.text = "";
+    dMController.text = "";
+    hE110Controller.text = "";
+    hE60Controller.text = "";
+    nDepController.text = "";
+
+    _infoText = "Preencha os campos";
+  }
+
+  double _salary_base(int days, double hourValue) {
+    double s = (220 / 30) * days * hourValue;
+
+    return s;
+  }
+
+  double extra_hour(double quantity, double hourValue, int percent) {
+    if (percent == 60) {
+      return quantity * hourValue * 1.6;
+    }
+    if (percent == 110) {
+      return quantity * hourValue * 2.1;
+    } else {
+      return 0.0;
+    }
+  }
+
+  void _calculate() {
+    setState(() {
+      double hV = double.parse(hVController.text);
+      double dM = double.parse(dMController.text);
+      double hE110 = double.parse(hE110Controller.text);
+      double hE60 = double.parse(hE60Controller.text);
+      double nDep = double.parse(nDepController.text);
+
+      double result = hE60 + hE110 + dM + nDep + hV;
+      _infoText = "$result";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,19 +74,41 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
         backgroundColor: Colors.blue,
         centerTitle: true,
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.refresh))
+          IconButton(onPressed: _resetFields, icon: const Icon(Icons.refresh))
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const CalculatorTextFormField(label: 'Valor da hora Trabalhada'),
-          const CalculatorTextFormField(label: 'Quantas dias tem o mês'),
-          const CalculatorTextFormField(label: 'Quantas horas extras 60 %'),
-          const CalculatorTextFormField(label: 'Quantas horas extras 110 %'),
-          const CalculatorTextFormField(label: 'Quantos dependentes você tem'),
-          CalculatorButton(label: 'Calculator', onPressed: () => {}),
-        ],
+      body: SingleChildScrollView(
+        child: IntrinsicHeight(
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CalculatorTextFormField(
+                    label: 'Valor da hora Trabalhada',
+                    controller: hVController),
+                CalculatorTextFormField(
+                    label: 'Quantas dias tem o mês', controller: dMController),
+                CalculatorTextFormField(
+                    label: 'Quantas horas extras 60 %',
+                    controller: hE60Controller),
+                CalculatorTextFormField(
+                  label: 'Quantas horas extras 110 %',
+                  controller: hE110Controller,
+                ),
+                CalculatorTextFormField(
+                  label: 'Quantos dependentes você tem',
+                  controller: nDepController,
+                ),
+                CalculatorButton(label: 'Calculator', onPressed: _calculate),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: Text(_infoText)),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

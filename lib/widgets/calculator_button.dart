@@ -16,7 +16,7 @@ class CalculatorButton extends StatelessWidget {
         width: 80.0,
         height: 40.0,
         child: ElevatedButton(
-          onPressed: () => {},
+          onPressed: onPressed,
           child: Text(
             label,
             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
