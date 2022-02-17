@@ -1,6 +1,7 @@
 import 'package:salary_calculator/widgets/calculator_text_form_field.dart';
 import 'package:salary_calculator/widgets/calculator_button.dart';
 import 'package:flutter/material.dart';
+import 'package:validatorless/validatorless.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -17,11 +18,13 @@ class SalaryCalculator extends StatefulWidget {
 }
 
 class _SalaryCalculatorState extends State<SalaryCalculator> {
+  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   final TextEditingController hVController = TextEditingController();
   final TextEditingController dMController = TextEditingController();
   final TextEditingController hE60Controller = TextEditingController();
   final TextEditingController hE110Controller = TextEditingController();
   final TextEditingController nDepController = TextEditingController();
+  final TextEditingController atrController = TextEditingController();
 
   String _infoText = "Preencha os campos";
 
@@ -31,6 +34,8 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
     hE110Controller.text = "";
     hE60Controller.text = "";
     nDepController.text = "";
+    atrController.text = "";
+
     setState(() {
       _infoText = "Preencha os campos";
     });
@@ -107,7 +112,7 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
       double liquido = total - inss - irpf - quinz - 26.40;
 
       _infoText =
-          " Quinzena: ${quinz.toStringAsFixed(2)} \n Salário no final do mês: ${liquido.toStringAsFixed(2)} \n inss: ${inss.toStringAsFixed(2)}\n Imposto de Renda: ${irpf.toStringAsFixed(2)}";
+          " Quinzena: ${quinz.toStringAsFixed(2)} R\$\n Salário no final do mês: ${liquido.toStringAsFixed(2)} R\$\n inss: ${inss.toStringAsFixed(2)} R\$\n Imposto de Renda: ${irpf.toStringAsFixed(2)} R\$";
     });
   }
 
@@ -127,34 +132,126 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
         child: IntrinsicHeight(
           child: Padding(
             padding: const EdgeInsets.all(5.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                CalculatorTextFormField(
-                    label: 'Valor da hora Trabalhada',
-                    controller: hVController),
-                CalculatorTextFormField(
-                    label: 'Quantas dias tem o mês', controller: dMController),
-                CalculatorTextFormField(
+            child: Form(
+              key: globalKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.next,
+                    label: 'Valor da hora de trabalho (R\$)',
+                    controller: hVController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        double parsedValue = double.parse(value);
+                        if (parsedValue <= 0) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.next,
+                    label: 'Quantas dias tem o mês',
+                    controller: dMController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        int parsedValue = int.parse(value);
+                        if (parsedValue <= 0 || parsedValue > 31) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.next,
                     label: 'Quantas horas extras 60 %',
-                    controller: hE60Controller),
-                CalculatorTextFormField(
-                  label: 'Quantas horas extras 110 %',
-                  controller: hE110Controller,
-                ),
-                CalculatorTextFormField(
-                  label: 'Quantos dependentes você tem',
-                  controller: nDepController,
-                ),
-                CalculatorButton(
-                    label: 'Calcular',
-                    onPressed: _calculate,
-                    color: const Color(0xFF5d8aa8)),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(child: Text(_infoText)),
-                )
-              ],
+                    controller: hE60Controller,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        double parsedValue = double.parse(value);
+                        if (parsedValue < 0) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.next,
+                    label: 'Quantas horas extras 110 %',
+                    controller: hE110Controller,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        double parsedValue = double.parse(value);
+                        if (parsedValue < 0) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.next,
+                    label: 'Horas de atraso ou faltas',
+                    controller: atrController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        double parsedValue = double.parse(value);
+                        if (parsedValue < 0) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorTextFormField(
+                    inputAction: TextInputAction.done,
+                    label: 'Quantos dependentes você tem',
+                    controller: nDepController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      } else {
+                        int parsedValue = int.parse(value);
+                        if (parsedValue < 0) {
+                          return 'Valor inválido';
+                        }
+                      }
+                    },
+                  ),
+                  CalculatorButton(
+                      label: 'Calcular',
+                      onPressed: () {
+                        final formValid =
+                            globalKey.currentState?.validate() ?? false;
+                        if (formValid) {
+                          _calculate();
+                        }
+                      },
+                      color: const Color(0xFF5d8aa8)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Center(
+                        child: Text(
+                      _infoText,
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Color(
+                            0xFF5d8aa8,
+                          ),
+                          fontWeight: FontWeight.w600),
+                    )),
+                  )
+                ],
+              ),
             ),
           ),
         ),

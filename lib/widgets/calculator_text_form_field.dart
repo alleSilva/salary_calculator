@@ -7,6 +7,7 @@ class CalculatorTextFormField extends StatelessWidget {
   final bool obscureText;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChange;
+  final TextInputAction? inputAction;
 
   const CalculatorTextFormField(
       {Key? key,
@@ -14,7 +15,8 @@ class CalculatorTextFormField extends StatelessWidget {
       this.controller,
       this.obscureText = false,
       this.validator,
-      this.onChange})
+      this.onChange,
+      this.inputAction})
       : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class CalculatorTextFormField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
       child: TextFormField(
+        textInputAction: inputAction,
         controller: controller,
         obscureText: obscureText,
         validator: validator,
