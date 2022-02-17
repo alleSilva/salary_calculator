@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CalculatorTextFormField extends StatelessWidget {
+  final primaryColor = const Color(0xFF5d8aa8);
   final String label;
   final TextEditingController? controller;
   final bool obscureText;
@@ -25,7 +26,7 @@ class CalculatorTextFormField extends StatelessWidget {
         obscureText: obscureText,
         validator: validator,
         onChanged: onChange,
-        cursorColor: Colors.orange,
+        cursorColor: primaryColor,
         textAlign: TextAlign.center,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
@@ -36,13 +37,13 @@ class CalculatorTextFormField extends StatelessWidget {
                 const TextStyle(color: Colors.redAccent, fontSize: 16.0),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(23),
-                borderSide: const BorderSide(color: Colors.blue)),
+                borderSide: BorderSide(color: primaryColor)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(23),
                 borderSide: const BorderSide(color: Colors.blueGrey)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(23),
-                borderSide: const BorderSide(color: Colors.blue)),
+                borderSide: BorderSide(color: primaryColor)),
             filled: true,
             fillColor: Colors.white),
       ),
