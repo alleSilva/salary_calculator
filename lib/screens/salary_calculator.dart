@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:salary_calculator/tabs/result_tab.dart';
 import 'package:salary_calculator/widgets/calculator_text_form_field.dart';
 import 'package:salary_calculator/widgets/calculator_button.dart';
+import 'package:salary_calculator/core/salary_info.dart';
 
 class SalaryCalculator extends StatefulWidget {
   const SalaryCalculator({Key? key}) : super(key: key);
@@ -87,7 +88,7 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
     }
   }
 
-  String _calculate() {
+  List _calculate() {
     double hV = double.parse(hVController.text);
     int dM = int.parse(dMController.text);
     double hE110 = double.parse(hE110Controller.text);
@@ -97,15 +98,26 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
     double totalExtra60 = _extraHour(hE60, hV, 60);
     double totalExtra110 = _extraHour(hE110, hV, 110);
     double totalExtra = totalExtra110 + totalExtra60;
-    double total = _salaryBase(dM, hV) + totalExtra;
-    double inss = _calcInss(total);
-    double irpf = _calcIr(total, inss, nDep);
+    double totalSalary = _salaryBase(dM, hV) + totalExtra;
+    double inss = _calcInss(totalSalary);
+    double irpf = _calcIr(totalSalary, inss, nDep);
     double quinz = _quinzena(hV);
-    double liquido = total - inss - irpf - quinz - 26.40;
+    double liquid = totalSalary - inss - irpf - quinz - 26.40;
+
+    List<SalaryInfo<String, double>> mapResult = [
+      SalaryInfo('totalExtra60', totalExtra60),
+      SalaryInfo('totalExtra110', totalExtra110),
+      SalaryInfo('totalExtra', totalExtra),
+      SalaryInfo('totalSalary', totalSalary),
+      SalaryInfo('inss', inss),
+      SalaryInfo('irpf', irpf),
+      SalaryInfo('quinz', quinz),
+      SalaryInfo('liquid', liquid)
+    ];
 
     String infoText =
-        " Quinzena: ${quinz.toStringAsFixed(2)} R\$\n Salário no final do mês: ${liquido.toStringAsFixed(2)} R\$\n inss: ${inss.toStringAsFixed(2)} R\$\n Imposto de Renda: ${irpf.toStringAsFixed(2)} R\$";
-    return infoText;
+        " Quinzena: ${quinz.toStringAsFixed(2)} R\$\n Salário no final do mês: ${liquid.toStringAsFixed(2)} R\$\n inss: ${inss.toStringAsFixed(2)} R\$\n Imposto de Renda: ${irpf.toStringAsFixed(2)} R\$";
+    return mapResult;
   }
 
   void _showResults(BuildContext context) {

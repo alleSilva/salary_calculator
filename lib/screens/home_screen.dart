@@ -11,7 +11,12 @@ class HomeScreen extends StatelessWidget {
     return PageView(
       physics: const NeverScrollableScrollPhysics(),
       controller: _pageController,
-      children: const <Widget>[SalaryCalculator(), ResultTab(result: "Teste")],
+      children: const <Widget>[
+        SalaryCalculator(),
+        ResultTab(
+          result: [],
+        )
+      ],
     );
   }
 }
