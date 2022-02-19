@@ -112,7 +112,8 @@ class _SalaryCalculatorState extends State<SalaryCalculator> {
       SalaryInfo('inss', inss),
       SalaryInfo('irpf', irpf),
       SalaryInfo('quinz', quinz),
-      SalaryInfo('liquid', liquid)
+      SalaryInfo('liquid', liquid),
+      SalaryInfo('totalMonth', quinz + liquid)
     ];
 
     String infoText =

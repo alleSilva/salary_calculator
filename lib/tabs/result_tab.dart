@@ -63,7 +63,7 @@ class ResultTab extends StatelessWidget {
                 Row(
                   children: [
                     const Text("Horas extras 110 %: "),
-                    Text(result[1].v.toString()),
+                    Text("R\$ " + result[1].v.toString()),
                   ],
                 ),
                 Row(
@@ -72,23 +72,22 @@ class ResultTab extends StatelessWidget {
                     Text("R\$ " + result[7].v.toStringAsFixed(2))
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Total Recebido no fim do mês: ',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18)),
-                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      const Text('Total Recebido no mês: ',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18)),
+                      Text("R\$ " + result[8].v.toStringAsFixed(2)),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-          Text(result[2].k),
-          Text(result[3].k),
-          Text(result[4].k),
-          Text(result[5].k),
-          Text(result[6].k),
-          Text(result[7].k),
         ]),
       ),
     );
